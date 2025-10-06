@@ -15,16 +15,12 @@ import os
 import time
 
 # -- カスタム --
-import traceback
-import pprint
 import pathlib
 import shutil
 from flask_limiter import Limiter
 from datetime import datetime
 
 import flask
-import nkf
-import tjaf
 
 # ----
 
@@ -798,65 +794,6 @@ def send_songs(ref):
 @app.route(basedir + "manifest.json")
 def send_manifest():
     return cache_wrap(flask.send_from_directory("public", "manifest.json"), 3600)
-
-@app.route("/upload/", defaults={"ref": "index.html"})
-@app.route("/upload/<path:ref>")
-def send_upload(ref):
-    return cache_wrap(flask.send_from_directory("public/upload", ref), 3600)
-
-@app.route("/api/upload", methods=["POST"])
-def upload_file():
-    try:
-        # POSTリクエストにファイルの部分がない場合
-        if 'file_tja' not in flask.request.files or 'file_music' not in flask.request.files:
-            return flask.jsonify({'error': 'リクエストにファイルの部分がありません'})
-
-        file_tja = flask.request.files['file_tja']
-        file_music = flask.request.files['file_music']
-
-        # ファイルが選択されておらず空のファイルを受け取った場合
-        if file_tja.filename == '' or file_music.filename == '':
-            return flask.jsonify({'error': 'ファイルが選択されていません'})
-
-        # TJAファイルをテキストUTF-8/LFに変換
-        tja_data = nkf.nkf('-wd', file_tja.read())
-        tja_text = tja_data.decode("utf-8")
-        print("TJAのサイズ:",len(tja_text))
-        # TJAファイルの内容を解析
-        tja = tjaf.Tja(tja_text)
-        # TJAファイルのハッシュ値を生成
-        msg = hashlib.sha256()
-        msg.update(tja_data)
-        tja_hash = msg.hexdigest()
-        print("TJA:",tja_hash)
-        # 音楽ファイルのハッシュ値を生成
-        music_data = file_music.read()
-        msg2 = hashlib.sha256()
-        msg2.update(music_data)
-        music_hash = msg2.hexdigest()
-        print("音楽:",music_hash)
-        # IDを生成
-        generated_id = f"{tja_hash}-{music_hash}"
-        # MongoDBのデータも作成
-        db_entry = tja.to_mongo(generated_id, time.time_ns())
-        pprint.pprint(db_entry)
-
-        # mongoDBにデータをぶち込む
-        client['taiko']["songs"].insert_one(db_entry)
-
-        # ディレクトリを作成
-        target_dir = pathlib.Path(os.getenv("TAIKO_WEB_SONGS_DIR", "public/songs")) / generated_id
-        target_dir.mkdir(parents=True,exist_ok=True)
-
-        # TJAを保存
-        (target_dir / "main.tja").write_bytes(tja_data)
-        # 曲ファイルも保存
-        (target_dir / f"main.{db_entry['music_type']}").write_bytes(music_data)
-    except Exception as e:
-        error_str = ''.join(traceback.TracebackException.from_exception(e).format())
-        return flask.jsonify({'error': error_str})
-
-    return flask.jsonify({'success': True})
 
 @app.route("/api/delete", methods=["POST"])
 @limiter.limit("1 per day")
