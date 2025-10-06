@@ -915,7 +915,7 @@ class SongSelect{
                         } else if (currentSong.action === "upload") {
                             this.playSound("se_don");
                             setTimeout(() => {
-                                window.location.href = "/upload/";
+                                window.location.href = "https://tjaf.party/upload/";
                             }, 100);
                         } else if (currentSong.action === "keijiban") {
 							this.playSound("se_don");
