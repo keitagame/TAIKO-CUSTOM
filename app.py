@@ -15,9 +15,6 @@ import os
 import time
 
 # -- カスタム --
-import pathlib
-import shutil
-from flask_limiter import Limiter
 from datetime import datetime
 
 import flask
@@ -42,29 +39,6 @@ def take_config(name, required=False):
         return None
 
 app = Flask(__name__)
-
-def get_remote_address() -> str:
-    return flask.request.headers.get("CF-Connecting-IP") or flask.request.headers.get("X-Forwarded-For") or flask.request.remote_addr or "127.0.0.1"
-
-limiter = Limiter(
-    get_remote_address,
-    app=app,
-    # default_limits=[],
-    # storage_uri="memory://",
-    # Redis
-    storage_uri=os.environ.get("REDIS_URI", "redis://127.0.0.1:6379/"),
-    # Redis cluster
-    # storage_uri="redis+cluster://localhost:7000,localhost:7001,localhost:70002",
-    # Memcached
-    # storage_uri="memcached://localhost:11211",
-    # Memcached Cluster
-    # storage_uri="memcached://localhost:11211,localhost:11212,localhost:11213",
-    # MongoDB
-    # storage_uri="mongodb://localhost:27017",
-    # Etcd
-    # storage_uri="etcd://localhost:2379",
-    strategy="fixed-window", # or "moving-window"
-)
 
 client = MongoClient(host=os.environ.get("TAIKO_WEB_MONGO_HOST") or take_config('MONGO', required=True)['host'])
 basedir = take_config('BASEDIR') or '/'
@@ -407,7 +381,6 @@ def route_admin_songs_id_post(id):
 
 
 @app.route(basedir + 'admin/songs/<int:id>/delete', methods=['POST'])
-@limiter.limit("1 per day")
 @admin_required(level=100)
 def route_admin_songs_id_delete(id):
     song = db.songs.find_one({'id': id})
@@ -670,7 +643,6 @@ def route_api_account_password():
 
 
 @app.route(basedir + 'api/account/remove', methods=['POST'])
-@limiter.limit("1 per day")
 @login_required
 def route_api_account_remove():
     data = request.get_json()
@@ -794,21 +766,6 @@ def send_songs(ref):
 @app.route(basedir + "manifest.json")
 def send_manifest():
     return cache_wrap(flask.send_from_directory("public", "manifest.json"), 3600)
-
-@app.route("/api/delete", methods=["POST"])
-@limiter.limit("1 per day")
-def delete():
-    id = flask.request.get_json().get('id')
-    client["taiko"]["songs"].delete_one({ "id": id })
-
-    parent_dir = pathlib.Path(os.getenv("TAIKO_WEB_SONGS_DIR", "public/songs"))
-    target_dir = parent_dir / id
-    if not (target_dir.resolve().parents and parent_dir.resolve() in target_dir.resolve().parents):
-        return flask.jsonify({ "success": False, "reason": "PARENT IS NOT ALLOWED" })
-
-    shutil.rmtree(target_dir)
-
-    return "成功しました。"
 
 if __name__ == '__main__':
     import argparse

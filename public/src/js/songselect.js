@@ -3257,21 +3257,8 @@ class SongSelect{
 
 	toDelete() {
 		// ここに削除処理を書く
-		if (!confirm("本当に削除しますか？\nこの曲に問題がある場合や\n公序良俗に反する場合にのみ実行したほうがいいと思います\n本当に曲が削除されます\n成功しても反映まで1分ほどかかる場合があります")) {
-			return;
-		}
-		fetch("/api/delete", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				id: this.songs[this.selectedSong].id,
-			})
-		})
-			.then((res) => res.text())
-			.then((text) => {
-				alert(text);
-			});
+		const id = this.songs[this.selectedSong].id;
+
+		window.location.href = `https://tjaf.party/delete/?id=${encodeURIComponent(id)}`;
 	}
 }
