@@ -1185,12 +1185,12 @@
 				y: config.y - 9 - offset,
 				w: 30,
 				h: 30,
-				id: big ? "big" : "small"
+				id: (big ? "big" : "small") + config.isRed
 			}, ctx => {
-				ctx.fillStyle = "#fff"
+				ctx.fillStyle = (config.isRed) ? "#f00" : "#fff"
 				this.shadow({
 					ctx: ctx,
-					fill: "#fff",
+					fill: (config.isRed) ? "#f00" : "#fff",
 					blur: 10,
 					force: true
 				})
@@ -1203,7 +1203,7 @@
 				ctx.fill(this.diffStarPath)
 			})
 		}else{
-			ctx.fillStyle = "#f72568"
+			ctx.fillStyle = (config.isRed) ? "#801235" : "#f72568"
 			ctx.translate(config.x - 10.5, config.y - 9.5)
 			ctx.scale(1.1, 1.1)
 			ctx.fill(this.diffStarPath)

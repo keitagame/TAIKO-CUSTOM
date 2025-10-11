@@ -1941,6 +1941,7 @@ class SongSelect{
 									ctx.fill()
 								}else{
 									this.draw.diffStar({
+										isRed: ((songStars >= (10 - j) + 10) ? true : false),
 										ctx: ctx,
 										songSel: songSel,
 										ura: currentUra,
