@@ -31,7 +31,7 @@ docker run --detach \
 サーバーを起動してください
 
 ```bash
-flask run
+flask run --host 0.0.0.0
 ```
 
 ## デプロイ
