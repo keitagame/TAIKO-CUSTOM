@@ -747,8 +747,13 @@ for code in error_pages:
 
 def cache_wrap(res_from, secs):
     res = flask.make_response(res_from)
-    res.headers["Cache-Control"] = f"public, max-age={secs}, s-maxage={secs}"
-    res.headers["CDN-Cache-Control"] = f"max-age={secs}"
+
+    if os.environ.get("FLASK_ENV") == "production":
+        res.headers["Cache-Control"] = f"public, max-age={secs}, s-maxage={secs}"
+        res.headers["CDN-Cache-Control"] = f"max-age={secs}"
+    else:
+        res.headers["Cache-Control"] = "no-cache"
+
     return res
 
 @app.route(basedir + "src/<path:ref>")
