@@ -40,7 +40,7 @@ def take_config(name, required=False):
 
 app = Flask(__name__)
 
-client = MongoClient(host=os.environ.get("TAIKO_WEB_MONGO_HOST") or take_config('MONGO', required=True)['host'])
+client = 0 #MongoClient(host=os.environ.get("TAIKO_WEB_MONGO_HOST") or take_config('MONGO', required=True)['host'])
 basedir = take_config('BASEDIR') or '/'
 
 app.secret_key = take_config('SECRET_KEY') or 'change-me'
@@ -58,10 +58,10 @@ sess = Session()
 sess.init_app(app)
 #csrf = CSRFProtect(app)
 
-db = client[take_config('MONGO', required=True)['database']]
-db.users.create_index('username', unique=True)
-db.songs.create_index('id', unique=True)
-db.scores.create_index('username')
+#db = client[take_config('MONGO', required=True)['database']]
+#db.users.create_index('username', unique=True)
+#db.songs.create_index('id', unique=True)
+#db.scores.create_index('username')
 
 
 class HashException(Exception):
@@ -456,6 +456,7 @@ def route_api_preview():
 @app.route(basedir + 'api/songs')
 @app.cache.cached(timeout=15)
 def route_api_songs():
+    """
     songs = list(db.songs.find({'enabled': True}, {'_id': False, 'enabled': False}))
     for song in songs:
         if song['maker_id']:
@@ -480,12 +481,21 @@ def route_api_songs():
         del song['skin_id']
 
     return cache_wrap(flask.jsonify(songs), 60)
-
+    """
+    songs = [
+        {"id": 1, "title": "Song A"},
+        {"id": 2, "title": "Song B"}
+    ]
+    return jsonify(songs)
 @app.route(basedir + 'api/categories')
 @app.cache.cached(timeout=15)
 def route_api_categories():
-    categories = list(db.categories.find({},{'_id': False}))
-    return jsonify(categories)
+    #categories = list(db.categories.find({},{'_id': False}))
+    #return jsonify(categories)
+    return jsonify([
+        {"id": 1, "name": "Default"},
+        {"id": 2, "name": "Sample"}
+    ])
 
 @app.route(basedir + 'api/config')
 @app.cache.cached(timeout=15)
