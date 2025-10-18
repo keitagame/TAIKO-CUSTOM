@@ -483,9 +483,15 @@ def route_api_songs():
     return cache_wrap(flask.jsonify(songs), 60)
     """
     songs = [
-        {"id": 1, "title": "Song A"},
-        {"id": 2, "title": "Song B"}
-    ]
+  {
+    "id": 3,
+    "title": "User Song",
+    "file": "songs/六十年目の.tja",
+    "audio": "songs/六十年目の.ogg",
+    "category": "Custom"
+  }
+]
+
     return jsonify(songs)
 @app.route(basedir + 'api/categories')
 @app.cache.cached(timeout=15)
