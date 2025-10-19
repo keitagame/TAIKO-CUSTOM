@@ -489,6 +489,38 @@ def route_api_songs():
     "file": "songs/六十年目の.tja",
     "audio": "songs/六十年目の.ogg",
     "category": "Custom"
+    "title_lang": {
+    "ja": "夏祭り",
+    "en": "Summer Festival",
+    "cn": null,
+    "tw": null,
+    "ko": null
+  },
+  "subtitle": "JITTERIN'JINN",
+  "subtitle_lang": {
+    "ja": "JITTERIN'JINN",
+    "en": null,
+    "cn": null,
+    "tw": null,
+    "ko": null
+  },
+  "courses": {
+    "easy": { "stars": 2, "branch": false },
+    "normal": { "stars": 4, "branch": false },
+    "hard": { "stars": 6, "branch": false },
+    "oni": { "stars": 8, "branch": true },
+    "ura": null
+  },
+  "enabled": true,
+  "category_id": 3,
+  "type": "pop",
+  "offset": 0,
+  "skin_id": 1,
+  "preview": 30,
+  "volume": 1.0,
+  "maker_id": 5,
+  "hash": "abc123xyz",
+  "order": 1
   }
 ]
 
