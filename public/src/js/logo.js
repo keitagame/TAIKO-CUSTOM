@@ -8,13 +8,13 @@
 		this.pathSvg = failedTests.indexOf("Path2D SVG") === -1 && vectors.logo1
 		this.symbolFont = "TnT, Meiryo, sans-serif"
 		this.symbols = [{
-			x: 315, y: 18, xAlt: 15, scale: true, text: "造",
+			x: 315, y: 18, xAlt: 15, scale: true, text: "ブ",
 			path: new Path2D(vectors.logo5)
 		}, {
-			x: 267, y: 50, yAlt: -34, scale: true, text: "改",
+			x: 267, y: 50, yAlt: -34, scale: true, text: "ェ",
 			path: new Path2D(vectors.logo4)
 		}, {
-			x: 197, y: 7, xAlt: 15, scale: true, text: "の",
+			x: 197, y: 7, xAlt: 15, scale: true, text: "ウ",
 			path: new Path2D(vectors.logo3)
 		}, {
 			x: 87, y: 7, xAlt: 15, text: "鼓",
