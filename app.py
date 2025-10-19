@@ -491,23 +491,17 @@ def route_api_songs():
     "category": "Custom",
     
  
-    "courses": {
-    "easy": { "stars": 2, "branch": false },
-    "normal": { "stars": 4, "branch": false },
-    "hard": { "stars": 6, "branch": false },
-    "oni": { "stars": 8, "branch": true },
-    "ura": null
-  },
-  "enabled": true,
-  "category_id": 3,
-  "type": "pop",
-  "offset": 0,
-  "skin_id": 1,
-  "preview": 30,
-  "volume": 1.0,
-  "maker_id": 5,
-  "hash": "abc123xyz",
-  "order": 1
+    
+    "enabled": true,
+    "category_id": 3,
+    "type": "pop",
+    "offset": 0,
+    "skin_id": 1,
+    "preview": 30,
+    "volume": 1.0,
+    "maker_id": 5,
+    "hash": "abc123xyz",
+    "order": 1
   }
 ]
 
