@@ -486,22 +486,18 @@ def route_api_songs():
   {
     "id": 3,
     "title": "User Song",
-    "file": "songs/六十年目の.tja",
-    "audio": "songs/六十年目の.ogg",
+    
     "category": "Custom",
     
  
     
-    "enabled": true,
-    "category_id": 3,
-    "type": "pop",
-    "offset": 0,
+    
     "skin_id": 1,
     "preview": 30,
     "volume": 1.0,
     "maker_id": 5,
     "hash": "abc123xyz",
-    "order": 1
+    
   }
 ]
 
